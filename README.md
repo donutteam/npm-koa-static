@@ -1,4 +1,4 @@
-# Koa Log Requests
+# Koa Static
 A class for creating Koa middlewares that serve files from one or more directories.
 
 This middleware is built on top of [koa-static-cache](https://www.npmjs.com/package/koa-static-cache).
