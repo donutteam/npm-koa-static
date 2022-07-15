@@ -2,6 +2,9 @@
 // Imports
 //
 
+import fs from "node:fs";
+import path from "node:path";
+
 import koaStaticCache from "koa-static-cache";
 
 //
@@ -103,5 +106,36 @@ export class StaticMiddleware
 				await next();
 			};
 		}
+	}
+
+	/**
+	 * Appends a cache buster to the given asset path.
+	 * 
+	 * @param {String} assetPath A relative path to a static asset.
+	 * @returns {String} The same path with a cache buster appended. If the file does not exist in any static directories, it will be returned as is.
+	 * @author Loren Goodwin
+	 */
+	getCacheBustedPath(assetPath)
+	{
+		for (const staticPath of this.staticMiddleware.paths)
+		{
+			const onDiskPath = path.join(staticPath, assetPath);
+
+			try
+			{
+				// HACK: Don't use statSync here
+				const stats = fs.statSync(onDiskPath);
+
+				let modifiedTimestamp = stats.mtime.getTime();
+
+				return assetPath + "?mtime=" + modifiedTimestamp.toString();
+			}
+			catch (error)
+			{
+				// Note: Doesn't matter if this fails, that just means it doesn't exist.
+			}
+		}
+
+		return assetPath;
 	}
 }
