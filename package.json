@@ -1,6 +1,6 @@
 {
   "name": "@donutteam/koa-static",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A class for creating Koa middlewares that serve files from one or more directories.",
   "main": "./index.js",
   "scripts": {
