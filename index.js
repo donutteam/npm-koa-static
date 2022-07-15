@@ -19,6 +19,13 @@ import koaStaticCache from "koa-static-cache";
 export class StaticMiddleware
 {
 	/**
+	 * This middleware's array of directories to serve static assets from.
+	 * 
+	 * @type {Array<String>}
+	 */
+	dirs = [];
+
+	/**
 	 * The middleware function.
 	 * 
 	 * @type {import("koa").Middleware}
@@ -82,6 +89,8 @@ export class StaticMiddleware
 		// Initialise Middlewares
 		//
 
+		this.dirs = options.dirs;
+
 		if (options.dirs.length > 0)
 		{
 			for (const [ dirIndex, dir ] of options.dirs.entries())
@@ -117,7 +126,7 @@ export class StaticMiddleware
 	 */
 	getCacheBustedPath(assetPath)
 	{
-		for (const staticPath of this.staticMiddleware.paths)
+		for (const staticPath of this.dirs)
 		{
 			const onDiskPath = path.join(staticPath, assetPath);
 
