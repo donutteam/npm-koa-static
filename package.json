@@ -1,0 +1,30 @@
+{
+  "name": "@donutteam/koa-static",
+  "version": "1.0.0",
+  "description": "A class for creating Koa middlewares that serve files from one or more directories.",
+  "main": "./index.js",
+  "scripts": {
+    "lint": "eslint . -c ./.eslintrc.cjs",
+    "lint-fix": "eslint . -c ./.eslintrc.cjs --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/donutteam/koa-static.git"
+  },
+  "keywords": [
+    "koa",
+    "koa-middleware",
+    "middleware",
+    "static"
+  ],
+  "author": "Donut Team",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "koa-static-cache": "^5.1.4"
+  },
+  "devDependencies": {
+    "@donutteam/eslint-config": "^1.0.6",
+    "koa": "^2.13.4"
+  }
+}
