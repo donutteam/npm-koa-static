@@ -2,10 +2,12 @@
   "name": "@donutteam/koa-static",
   "version": "1.0.3",
   "description": "A class for creating Koa middlewares that serve files from one or more directories.",
-  "main": "./index.js",
+  "main": "./lib/index.js",
   "scripts": {
+    "build": "npx rimraf lib && npx tsc",
     "lint": "eslint . -c ./.eslintrc.cjs",
-    "lint-fix": "eslint . -c ./.eslintrc.cjs --fix"
+    "lint-fix": "eslint . -c ./.eslintrc.cjs --fix",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -21,10 +23,16 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
+    "@types/koa-static-cache": "^5.1.1",
     "koa-static-cache": "^5.1.4"
   },
   "devDependencies": {
     "@donutteam/eslint-config": "^1.0.6",
-    "koa": "^2.13.4"
+    "@types/koa": "^2.13.6",
+    "@types/node": "^20.2.5",
+    "eslint": "^8.42.0",
+    "koa": "^2.13.4",
+    "rimraf": "^5.0.1",
+    "typescript": "^5.1.3"
   }
 }

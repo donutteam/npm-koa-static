@@ -5,11 +5,21 @@
 import fs from "node:fs";
 import path from "node:path";
 
+import type { Middleware } from "koa";
 import koaStaticCache from "koa-static-cache";
 
 //
 // Static Middleware
 //
+
+export interface StaticMiddlewareOptions
+{
+	/** The directories to serve static assets from. */
+	dirs: string[];
+
+	/** Options for the underlying koa-static-cache instances. Note that the "dir" and "files" options will be ignored. */
+	koaStaticCache?: koaStaticCache.Options;
+}
 
 /**
  * A class for creating middleware's that serve static files.
@@ -18,72 +28,37 @@ import koaStaticCache from "koa-static-cache";
  */
 export class StaticMiddleware
 {
-	/**
-	 * This middleware's array of directories to serve static assets from.
-	 * 
-	 * @type {Array<String>}
-	 */
-	dirs = [];
+	/** This middleware's array of directories to serve static assets from. */
+	dirs : string[] = [];
 
 	/**
 	 * The middleware function.
 	 * 
 	 * @type {import("koa").Middleware}
 	 */
-	execute;
+	execute : Middleware;
 
-	/**
-	 * The files object shared by all of the underlying koa-static-cache instances.
-	 * 
-	 * @type {Object<string, string>}
-	 */
-	files = {};
+	/** The files object shared by all of the underlying koa-static-cache instances. */
+	files : { [filePath : string] : string } = {};
 
 	/**
 	 * Constructs a new StaticMiddleware.
 	 *
-	 * @param {Object} options Options for the middleware.
-	 * @param {Array<String>} options.dirs
-	 * @param {import("koa-static-cache").Options} [options.koaStaticCache] Options for the underlying koa-static-cache instances. Note that the "dir" and "files" options will be ignored.
 	 * @author Loren Goodwin
 	 */
-	constructor(options)
+	constructor(options : StaticMiddlewareOptions)
 	{
 		//
 		// Options
 		//
 
-		if (options == undefined)
-		{
-			options = {};
-		}
+		options.koaStaticCache ??= {};
 
-		if (options.dirs == undefined)
-		{
-			console.log("[StaticMiddleware] No directories were given to the constructor, this middleware will do nothing!");
+		options.koaStaticCache.dynamic ??= process.env.NODE_ENV != "production";
 
-			options.dirs = [];
-		}
+		options.koaStaticCache.gzip ??= true;
 
-		if (options.koaStaticCache == undefined)
-		{
-			options.koaStaticCache = {};
-		}
-
-		if (options.koaStaticCache.dynamic == undefined)
-		{
-			options.koaStaticCache.dynamic = process.env.NODE_ENV != "production";
-		}
-
-		if (options.koaStaticCache.gzip == undefined)
-		{
-			options.koaStaticCache.gzip = true;
-		}
-
-		if (options.koaStaticCache.maxAge == undefined)
-		{
-			options.koaStaticCache.maxAge = 365 * 24 * 60 * 60;
-		}
+		options.koaStaticCache.maxAge ??= 365 * 24 * 60 * 60;
 
 		//
 		// Initialise Middlewares
