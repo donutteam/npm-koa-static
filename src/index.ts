@@ -39,7 +39,7 @@ export class StaticMiddleware
 	execute : Middleware;
 
 	/** The files object shared by all of the underlying koa-static-cache instances. */
-	files : { [filePath : string] : string } = {};
+	files : koaStaticCache.Files = {};
 
 	/**
 	 * Constructs a new StaticMiddleware.
